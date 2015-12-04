@@ -1,0 +1,252 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{CDA887CB-3F2B-44E6-8911-D9F26D647022}</ProjectGuid>
+			<ProjectVersion>12.3</ProjectVersion>
+			<MainSource>TestOpmStation.cpp</MainSource>
+			<Base>True</Base>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<Platform>Win32</Platform>
+			<AppType>Application</AppType>
+			<FrameworkType>VCL</FrameworkType>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<UsePackages>true</UsePackages>
+			<LinkPackageImports>rtl.bpi;vcl.bpi;inet.bpi</LinkPackageImports>
+			<OutputExt>exe</OutputExt>
+			<ILINK_LibraryPath>..\..\LTSyncNew\hard\;..\..\OtdrMeasEngine\hard\;..\..\OPM software\hard\;..\dist\;..\..\OPM software\__externals\platform-abstraction\;..\..\OPM software\__externals\util\;..\..\OPM software\__externals\headers\;..\..\OPM software\_opm.dll\platform-specific\windows\;device\;..\Out\;..\..\OtdrMeasEngine\__WinOut\;..\__WinOut\;D:\Lesha\Rad project\FirstApp\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<PackageImports>vclimg.bpi;vcl.bpi;vclx.bpi;dbrtl.bpi;Rave90VCL.bpi;bdertl.bpi;rtl.bpi;bcbie.bpi;xmlrtl.bpi;vclactnband.bpi;bcbsmp.bpi;svnui.bpi;svn.bpi;TeeUI.bpi;TeeDB.bpi;Tee.bpi;vcldb.bpi;vcldbx.bpi;vcltouch.bpi;dsnap.bpi;dsnapcon.bpi;vclib.bpi;ibxpress.bpi;adortl.bpi;IndyCore.bpi;IndySystem.bpi;IndyProtocols.bpi;inet.bpi;intrawebdb_110_150.bpi;Intraweb_110_150.bpi;vclie.bpi;websnap.bpi;webdsnap.bpi;inetdb.bpi;inetdbbde.bpi;inetdbxpress.bpi;soaprtl.bpi;vclribbon.bpi;dbexpress.bpi;DbxCommonDriver.bpi;DataSnapIndy10ServerTransport.bpi;DataSnapProviderClient.bpi;DbxClientDriver.bpi;DataSnapClient.bpi;dbxcds.bpi;DataSnapServer.bpi;AzureCloud.bpi;DBXInterBaseDriver.bpi;DBXMySQLDriver.bpi;DBXFirebirdDriver.bpi;DBXSybaseASEDriver.bpi;DBXSybaseASADriver.bpi;DBXOracleDriver.bpi;DBXMSSQLDriver.bpi;DBXInformixDriver.bpi;DBXDb2Driver.bpi;CodeSiteExpressVcl.bpi</PackageImports>
+			<Multithreaded>true</Multithreaded>
+			<IncludePath>..\..\LTSyncNew\hard\;..\..\OtdrMeasEngine\hard\;..\..\OPM software\hard\;..\dist\;..\..\OPM software\__externals\platform-abstraction\;..\..\OPM software\__externals\util\;..\..\OPM software\__externals\headers\;..\..\OPM software\_opm.dll\platform-specific\windows\;device\;D:\Lesha\Rad project\FirstApp\;$(IncludePath)</IncludePath>
+			<AllPackageLibs>rtl.lib;vcl.lib;inet.lib</AllPackageLibs>
+			<ProjectType>CppVCLApplication</ProjectType>
+			<_TCHARMapping>wchar_t</_TCHARMapping>
+			<DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE</DCC_UnitAlias>
+			<DynamicRTL>true</DynamicRTL>
+			<IntermediateOutputDir>.\$(Config)\$(Platform)</IntermediateOutputDir>
+			<FinalOutputDir>.\$(Config)\$(Platform)</FinalOutputDir>
+			<BCC_wpar>false</BCC_wpar>
+			<BCC_OptimizeForSpeed>true</BCC_OptimizeForSpeed>
+			<BCC_ExtendedErrorInfo>true</BCC_ExtendedErrorInfo>
+			<ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\release\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<ILINK_AdditionalOptions>/Gn</ILINK_AdditionalOptions>
+			<FinalOutputDir>..\Out\</FinalOutputDir>
+			<IncludePath>D:\Lesha\OtdrMeasEngine\_dbmodif.dll;D:\Lesha\OPM software\__externals;D:\Lesha\OPM software\_opm.dll;D:\Lesha\TestDLL\FirstApp\device;D:\Lesha\LTSyncNew\hard;$(IncludePath)</IncludePath>
+			<BCC_OptimizeForSpeed>false</BCC_OptimizeForSpeed>
+			<BCC_DisableOptimizations>true</BCC_DisableOptimizations>
+			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+			<Defines>_DEBUG;__WINDOWS__;$(Defines)</Defines>
+			<BCC_InlineFunctionExpansion>false</BCC_InlineFunctionExpansion>
+			<BCC_UseRegisterVariables>None</BCC_UseRegisterVariables>
+			<DCC_Define>DEBUG</DCC_Define>
+			<BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
+			<TASM_DisplaySourceLines>true</TASM_DisplaySourceLines>
+			<BCC_StackFrames>true</BCC_StackFrames>
+			<ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
+			<TASM_Debugging>Full</TASM_Debugging>
+			<BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
+			<ILINK_LibraryPath>$(BDSLIB)\$(PLATFORM)\debug;D:\Lesha\TestDLL\Out;D:\Lesha\OPM software\__WinOut\LIB;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\debug\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DynamicRTL>false</DynamicRTL>
+			<IncludePath>D:\Lesha\OPM software\__externals;D:\Lesha\OPM software\_opm.dll;$(IncludePath)</IncludePath>
+			<FinalOutputDir>..\Out\</FinalOutputDir>
+			<ILINK_AdditionalOptions>/Gn</ILINK_AdditionalOptions>
+			<Defines>NDEBUG;__WINDOWS__;$(Defines)</Defines>
+			<TASM_Debugging>None</TASM_Debugging>
+		</PropertyGroup>
+		<ItemGroup>
+			<CppCompile Include="..\..\LTSyncNew\hard\socket_port.cpp">
+				<BuildOrder>25</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="..\..\LTSyncNew\hard\w_tcp.cpp">
+				<DependentOn>..\..\LTSyncNew\hard\w_tcp.h</DependentOn>
+				<BuildOrder>24</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="..\..\LTSyncNew\hard\x_Port.cpp">
+				<DependentOn>..\..\LTSyncNew\hard\x_Port.h</DependentOn>
+				<BuildOrder>23</BuildOrder>
+			</CppCompile>
+			<None Include="..\..\OPM software\_opm.dll\platform-specific\windows\PlatformSpecificLibraryHandle.h">
+				<BuildOrder>6</BuildOrder>
+			</None>
+			<CppCompile Include="..\..\OPM software\__externals\util\mutex.cpp">
+				<BuildOrder>23</BuildOrder>
+			</CppCompile>
+			<None Include="..\..\OPM software\__externals\util\mutex.h">
+				<BuildOrder>22</BuildOrder>
+			</None>
+			<CppCompile Include="..\..\OPM software\__externals\util\netutil.cpp">
+				<DependentOn>..\..\OPM software\__externals\util\netutil.h</DependentOn>
+				<BuildOrder>18</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="..\..\OPM software\__externals\util\sleep.cpp">
+				<BuildOrder>19</BuildOrder>
+			</CppCompile>
+			<None Include="..\..\OPM software\__externals\util\sleep.h">
+				<BuildOrder>22</BuildOrder>
+			</None>
+			<CppCompile Include="..\..\OPM software\__externals\util\tlogfile.cpp">
+				<DependentOn>..\..\OPM software\__externals\util\tlogfile.h</DependentOn>
+				<BuildOrder>7</BuildOrder>
+			</CppCompile>
+			<LibFiles Include="..\..\OtdrMeasEngine\__WinOut\dbmodif.lib">
+				<IgnorePath>true</IgnorePath>
+				<BuildOrder>27</BuildOrder>
+			</LibFiles>
+			<CppCompile Include="..\dist\jsoncpp.cpp">
+				<BuildOrder>13</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="DeviceConnectionRequest.cpp">
+				<DependentOn>DeviceConnectionRequest.h</DependentOn>
+				<BuildOrder>4</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="deviceInfoProvider.cpp">
+				<DependentOn>deviceInfoProvider.h</DependentOn>
+				<BuildOrder>8</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="DeviceRepresentation.cpp">
+				<DependentOn>DeviceRepresentation.h</DependentOn>
+				<BuildOrder>10</BuildOrder>
+			</CppCompile>
+			<None Include="device\device.hpp">
+				<BuildOrder>5</BuildOrder>
+			</None>
+			<CppCompile Include="device\hardwareInterface.cpp">
+				<DependentOn>device\hardwareInterface.h</DependentOn>
+				<BuildOrder>25</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="paths.cpp">
+				<DependentOn>paths.h</DependentOn>
+				<BuildOrder>12</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="rc_util.cpp">
+				<DependentOn>rc_util.h</DependentOn>
+				<BuildOrder>14</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="tcpIpHwIntrf.cpp">
+				<DependentOn>tcpIpHwIntrf.h</DependentOn>
+				<BuildOrder>26</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="TestOpmStation.cpp">
+				<BuildOrder>0</BuildOrder>
+			</CppCompile>
+			<ResFiles Include="TestOpmStation.res">
+				<BuildOrder>1</BuildOrder>
+			</ResFiles>
+			<CppCompile Include="tstring.cpp">
+				<DependentOn>tstring.h</DependentOn>
+				<BuildOrder>15</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="Unit1.cpp">
+				<Form>Form1</Form>
+				<DependentOn>Unit1.h</DependentOn>
+				<BuildOrder>2</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="winUsbHwIntrf.cpp">
+				<DependentOn>winUsbHwIntrf.h</DependentOn>
+				<BuildOrder>11</BuildOrder>
+			</CppCompile>
+			<LibFiles Include="..\Out\dbmodif.lib">
+				<IgnorePath>true</IgnorePath>
+				<BuildOrder>28</BuildOrder>
+			</LibFiles>
+			<None Include="..\Out\DllTest.lib">
+				<Exclude>True</Exclude>
+				<IgnorePath>true</IgnorePath>
+				<BuildOrder>3</BuildOrder>
+			</None>
+			<LibFiles Include="..\Out\opm.lib">
+				<IgnorePath>true</IgnorePath>
+				<BuildOrder>25</BuildOrder>
+			</LibFiles>
+			<None Include="..\Out\opm.obj">
+				<Exclude>True</Exclude>
+				<IgnorePath>true</IgnorePath>
+				<BuildOrder>24</BuildOrder>
+			</None>
+			<FormResources Include="Unit1.dfm"/>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Cpp.Targets')" Project="$(BDS)\Bin\CodeGear.Cpp.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
+		<ProjectExtensions>
+			<Borland.Personality>CPlusPlusBuilder.Personality.12</Borland.Personality>
+			<Borland.ProjectType>CppVCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<CPlusPlusBuilder.Personality>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">1</VersionInfo>
+						<VersionInfo Name="Release">2</VersionInfo>
+						<VersionInfo Name="Build">26</VersionInfo>
+						<VersionInfo Name="Debug">True</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">False</VersionInfo>
+						<VersionInfo Name="Locale">1033</VersionInfo>
+						<VersionInfo Name="CodePage">1252</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.1.2.26</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+					<ProjectProperties>
+						<ProjectProperties Name="AutoShowDeps">False</ProjectProperties>
+						<ProjectProperties Name="ManagePaths">True</ProjectProperties>
+						<ProjectProperties Name="VerifyPackages">True</ProjectProperties>
+					</ProjectProperties>
+					<Source>
+						<Source Name="MainSource">TestOpmStation.cpp</Source>
+					</Source>
+					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\bcboffice2k150.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\bcbofficexp150.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
+					</Excluded_Packages>
+				</CPlusPlusBuilder.Personality>
+				<Platforms>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
+				<ModelSupport>False</ModelSupport>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>
