@@ -82,6 +82,15 @@ __published:	// IDE-managed Components
 	TTabSheet *TabSheet3;
 	TButton *Button17;
 	TButton *Button18;
+	TCheckBox *CheckBoxCh850;
+	TCheckBox *CheckBoxCh1300;
+	TCheckBox *CheckBoxCh1310;
+	TCheckBox *CheckBoxCh1490;
+	TCheckBox *CheckBoxCh1550;
+	TCheckBox *CheckBoxCh1625;
+	TCheckBox *CheckBoxCh1650;
+	TButton *Button19;
+	TCheckBox *CheckBoxEnableChange;
 	void __fastcall initGPIBButtonClick(TObject *Sender);
 	void __fastcall Button3Click(TObject *Sender);
 	void __fastcall initInstrumentButtonClick(TObject *Sender);
@@ -111,6 +120,7 @@ __published:	// IDE-managed Components
 	void __fastcall typeConnectionClick(TObject *Sender);
 	void __fastcall Button17Click(TObject *Sender);
 	void __fastcall Button18Click(TObject *Sender);
+	void __fastcall Button19Click(TObject *Sender);
 
 
 
@@ -121,23 +131,29 @@ private:	// User declarations
 
 	float wl_delta;
 	bool flag_init_OPM;
+	bool flag_init_TLS;
+	bool flag_init_GOLDOPM;
 	float delta;
 	float pwr,pwr_gold;
 	bool flagFake;
 
 	float delta_array[MAX_WL];
 
-	float result[MAX_WL][3];
+	float result[MAX_WL][4];   // [][0] - gold_device, [][1] - power OPM, [][2] - delta, [][3] -koeffFromDB
 
 	char pathForResult[128];
+	char pathForDb[256];
 
 	int type_pm;    // 0 - pm2,  1 - pm1
 	unsigned numberDevice;
 	unsigned deviceWavelenght[20];
+	float deviceKoeff[20];
 	int numberOfWavelenghtInDevice;
 
-	int SetWorkingWaveLenght(int index);
+	int SetWorkingWaveLenght(int index,int *indexInDevice);
+	int ReturnDeviceIndexOfWave(int wlnumber);
 	void ReadPower(int indexWave);
+	void ChangeInDataBase(char *buffSerialNumber,int n);
 
 	void UpdateResultTable();
 	void generateFakeResult();

@@ -51,9 +51,9 @@ instrumentWaveLenghtMeter *dev_wlm;
 TPort* Port;
 
 Measurer  *measurer;
-OpmHandle handle;
+//OpmHandle handle;
 
-DeviceConnectionRequest *mydeviceConnectionRequest;
+//DeviceConnectionRequest *mydeviceConnectionRequest;
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
@@ -65,7 +65,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
    dev_wlm = new instrumentWaveLenghtMeter();
 
 
-  init_database_path("autoprg-lts-veritech.db"); // valid path required
+ /*
 
   char bufdb[1024*3];
   int len=1024*3;
@@ -75,7 +75,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 
   get_unit_param_raw("546415","W1","KWln",bufdb,len);
   len2 = strlen(bufdb);
-
+ */
 
 	char bufver[32];
 
@@ -108,6 +108,8 @@ __fastcall TForm1::TForm1(TComponent* Owner)
   StringGrid1->RowCount = n_wl;
 
   flag_init_OPM = false;
+  flag_init_TLS = false;
+  flag_init_GOLDOPM = false;
 
    StringGrid2->Cells[1][0] = "Gold";
    StringGrid2->Cells[2][0] = "FX-40/45";
@@ -153,15 +155,21 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 
 			  StringGrid1->Cells[1][i] = AnsiString(buf);
 		}
-
+		fscanf(f,"%s",pathForDb);
 
 		fclose(f);
 		}
 
-
-
-
-
+   f = fopen(pathForDb,"r");
+   if(f)
+   {
+	  init_database_path(pathForDb); // valid path required
+	  answerInsrtumentMemo->Lines->Add("data base is open ok!");
+	  fclose(f);
+   } else
+   {
+	   answerInsrtumentMemo->Lines->Add("!!! Can't open database file!");
+   }
 
 }
 //---------------------------------------------------------------------------
@@ -208,6 +216,8 @@ void __fastcall TForm1::initInstrumentButtonClick(TObject *Sender)
 
 	answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
   //	Label1->Caption = IntToStr(a);
+   if ( a==0 ) flag_init_GOLDOPM = true;
+
 }
 //---------------------------------------------------------------------------
 
@@ -270,6 +280,8 @@ void __fastcall TForm1::buttonInitLaserClick(TObject *Sender)
 	a = dev_lsr->instrumnetConnect();
 
 	answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
+
+	if ( a==0 ) flag_init_TLS = true;
 }
 //---------------------------------------------------------------------------
 
@@ -279,6 +291,8 @@ void __fastcall TForm1::laserWaveButtonClick(TObject *Sender)
 
    a = dev_lsr->setWavelenght(AnsiString(laserWave->Text).c_str());
    answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
+
+
 }
 //---------------------------------------------------------------------------
 
@@ -323,6 +337,7 @@ void __fastcall TForm1::Button6Click(TObject *Sender)
 		if( typeConnection->ItemIndex == 0 )
 		{
 		   measurer = my_deviceInfoProvider->connectToDevice(0);
+
 		} else {
 
 			std::string adr(AnsiString(ipAdressText->Text).c_str());
@@ -360,17 +375,29 @@ void __fastcall TForm1::Button6Click(TObject *Sender)
 	   }
 
 
-	   char buf[160];
+	   char buf[160],bufsn[160],buft[4];
 	   numberDevice = measurer->getOpticalModuleSerialNumber();
 	   sprintf(buf,"internal serial number %d",numberDevice);
+	   sprintf(bufsn,"%d",numberDevice);
 	   answerInsrtumentMemo->Lines->Add(buf);
 
 	   sprintf(buf,"Number of wavelenght %d",nw);
 	   answerInsrtumentMemo->Lines->Add(buf);
 
+	   char bufsection[5];
+	   int len=160;
 	   for (int i = 0; i < nw; i++) {
 		 deviceWavelenght[i] = measurer->getWavelength(i);
 		 sprintf(buf,"Number %d is wavelenght %d",i,deviceWavelenght[i]);
+		 answerInsrtumentMemo->Lines->Add(buf);
+
+		 bufsection[0]='W';
+		 bufsection[1]=0;
+		 sprintf(buft,"%d",i);
+		 strcat(bufsection,buft);
+		 get_unit_param_raw(bufsn,bufsection,"KWln",buf,len);
+
+		 sscanf(buf,"%f",&deviceKoeff[i]);
 		 answerInsrtumentMemo->Lines->Add(buf);
 	   }
 
@@ -473,8 +500,8 @@ void __fastcall TForm1::Button9Click(TObject *Sender)
 // Set wave for all button
 void __fastcall TForm1::Button10Click(TObject *Sender)
 {
-
-   SetWorkingWaveLenght(RadioGroup1->ItemIndex);
+   int indexInDevice;
+   SetWorkingWaveLenght(RadioGroup1->ItemIndex,&indexInDevice);
 
 }
 //---------------------------------------------------------------------------
@@ -491,23 +518,36 @@ void __fastcall TForm1::Button11Click(TObject *Sender)
    StringGrid1->Cells[1][RadioGroup1->ItemIndex] = AnsiString(buf);
 }
 //---------------------------------------------------------------------------
-int TForm1::SetWorkingWaveLenght(int index)
+int TForm1::ReturnDeviceIndexOfWave(int wlnumber)
+{
+   for(int i = 0; i < numberOfWavelenghtInDevice; i++)
+   {
+	  if(wlnumber == deviceWavelenght[i] )
+	  {
+		return i;
+	  }
+   }
+   return -1;
+}
+//---------------------------------------------------------------------------
+
+int TForm1::SetWorkingWaveLenght(int index,int *indexInDevice)
 {
 	int a;
-	int indexInDevice;
+ //	int indexInDevice;
   char wl[10];
    int wlnumber;
 
    strcpy( wl, num_wl[index].c_str());
    wlnumber = StrToInt(wl);
 
-   if( ControlTLS->Checked)
+   if( ControlTLS->Checked && flag_init_TLS)
    {
 	  a = dev_lsr->setWavelenght(wl);
 	  answerInsrtumentMemo->Lines->Add("TLS Answer " + IntToStr(a));
    }
 
-   if(ReadTwoPorts->Checked)
+   if(ReadTwoPorts->Checked && flag_init_GOLDOPM)
    {
 		a = dev->setWavelenght(1,wl);
 		answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
@@ -520,20 +560,14 @@ int TForm1::SetWorkingWaveLenght(int index)
    {
 	  if( flag_init_OPM )
 	  {
-		 bool flag_present_wave = false;
-		 for(int i = 0; i < numberOfWavelenghtInDevice; i++)
+
+		 *indexInDevice = ReturnDeviceIndexOfWave(wlnumber);
+
+
+		 if( (*indexInDevice)>=0 )
 		 {
-			 if(wlnumber == deviceWavelenght[i] )
-			 {
-				 flag_present_wave = true;
-				 indexInDevice = i;
-				 break;
-			 }
-		 }
-		 if( flag_present_wave )
-		 {
-		   // measurer->switchWavelengthByIndex(index + type_pm);
-			  measurer->switchWavelengthByIndex(indexInDevice);
+
+			  measurer->switchWavelengthByIndex(*indexInDevice);
 			  answerInsrtumentMemo->Lines->Add("Ok");
 		 } else
 		 {
@@ -550,8 +584,14 @@ int TForm1::SetWorkingWaveLenght(int index)
 		return 1;
 	  }
 
-	  a = dev->setWavelenght(StrToInt(slotNumber->Text),wl);
-	  answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
+	  if( flag_init_GOLDOPM)
+	  {
+		 a = dev->setWavelenght(StrToInt(slotNumber->Text),wl);
+		 answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
+	  } else
+	  {
+         answerInsrtumentMemo->Lines->Add("Gold OPM not init!!!");
+      }
    }
    char buf[40];
    strcpy(buf,"Wavelenght=");
@@ -567,7 +607,7 @@ void TForm1::ReadPower(int indexWave)
    int a;
    char buf[256];
 
-   if(ReadTwoPorts->Checked)
+   if(ReadTwoPorts->Checked && flag_init_GOLDOPM)
    {
 		a = dev->returnPower(2,buf);      // Read Agilent slot 2
 		pwr = atof(buf);
@@ -577,9 +617,14 @@ void TForm1::ReadPower(int indexWave)
    }
 
 
-
-   a = dev->returnPower(StrToInt(slotNumber->Text),buf);
-   pwr_gold = atof(buf);
+   if(flag_init_GOLDOPM)
+   {
+	 a = dev->returnPower(StrToInt(slotNumber->Text),buf);
+	 pwr_gold = atof(buf);
+   } else
+   {
+      pwr_gold = -100.0;
+   }
 
 
    float dl=0.0;
@@ -610,25 +655,30 @@ void __fastcall TForm1::Button12Click(TObject *Sender)
 {
    char buf[100];
    int res;
+   int indexInDevice;
    for(int i=1;i<n_wl;i++)    // skip 850nm
    {
-	   res = SetWorkingWaveLenght(i);
+	   res = SetWorkingWaveLenght(i,&indexInDevice);
 	   if(res)
 	   {
-		   if(res==1)
+		   if(res==1)    // opm not init
 		   return;
-				result[i][0] = 0;
+				result[i][0] = 0;   // res=2 opm not support wavelaengh
 				result[i][1] = 0;
 				result[i][2] = 0;
 
 	   } else
 	   {
-	   Sleep(4000);
+	   if(flag_init_GOLDOPM && flag_init_TLS)
+	   {
+		 Sleep(4000);
+	   } else Sleep(500);
 
 	   ReadPower(i);
 	   result[i][0] = pwr_gold + delta_array[i];
 	   result[i][1] = pwr;
 	   result[i][2] = delta;
+	   result[i][3] = deviceKoeff[indexInDevice];
 
 	  sprintf(buf, "gold=%.4f fx40=%.4f delta=%.4f", result[i][0],result[i][1],result[i][2] );
 	  answerInsrtumentMemo->Lines->Add(buf);
@@ -649,7 +699,11 @@ void __fastcall TForm1::Button12Click(TObject *Sender)
    flagFake = false;
    int a;
 
-   a = dev_lsr->setWavelenght("1300");
+   if(flag_init_TLS)
+   {
+	 a = dev_lsr->setWavelenght("1300");
+   }
+
    answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
 
    answerInsrtumentMemo->Lines->Add("----------FINISHED-----------");
@@ -900,6 +954,81 @@ void __fastcall TForm1::Button18Click(TObject *Sender)
 	a = dev_wlm->resetInstument();
 
 	answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
+}
+//---------------------------------------------------------------------------
+void TForm1::ChangeInDataBase(char *buffSerialNumber,int n)
+{
+   int indexInDevice;
+   indexInDevice = ReturnDeviceIndexOfWave(StrToInt(num_wl[n]));
+   if(indexInDevice>=0)
+   {
+	  char bufsection[6];
+	  char buft[4];
+
+	  bufsection[0]='W';
+	  bufsection[1]=0;
+	  sprintf(buft,"%d",indexInDevice);
+	  strcat(bufsection,buft);
+
+	  modify_unit_parameter_double(buffSerialNumber,bufsection,"KWln",result[n][3]-result[n][2]);
+   }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button19Click(TObject *Sender)
+{
+   if(CheckBoxEnableChange->Checked)
+   {
+	   char bufsn[20];
+
+	   int n;
+	   sprintf(bufsn,"%d",numberDevice);
+	   int indexInDevice;
+
+	 ///////////////////////////////////////
+	   if(CheckBoxCh850->Checked)
+	   {
+		 n=0;
+		 ChangeInDataBase(bufsn,n);
+	   }
+
+	   ///////////////////////////////////////
+	   if(CheckBoxCh1300->Checked)
+	   {
+		 n=1;
+		 ChangeInDataBase(bufsn,n);
+	   }
+	   ///////////////////////////////////////
+	   if(CheckBoxCh1310->Checked)
+	   {
+		 n=2;
+		 ChangeInDataBase(bufsn,n);
+	   }
+	   ///////////////////////////////////////
+	   if(CheckBoxCh1490->Checked)
+	   {
+		 n=3;
+		 ChangeInDataBase(bufsn,n);
+	   }
+	   ///////////////////////////////////////
+	   if(CheckBoxCh1550->Checked)
+	   {
+		 n=4;
+		 ChangeInDataBase(bufsn,n);
+	   }
+	   ///////////////////////////////////////
+	   if(CheckBoxCh1625->Checked)
+	   {
+		 n=5;
+		 ChangeInDataBase(bufsn,n);
+	   }
+	   ///////////////////////////////////////
+	   if(CheckBoxCh1650->Checked)
+	   {
+		 n=6;
+		 ChangeInDataBase(bufsn,n);
+	   }
+   }
 }
 //---------------------------------------------------------------------------
 

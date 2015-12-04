@@ -392,14 +392,14 @@ object Form1: TForm1
       Caption = 'Auto mode'
       ImageIndex = 1
       object Label6: TLabel
-        Left = 32
+        Left = 16
         Top = 32
         Width = 84
         Height = 13
         Caption = 'Number of device'
       end
       object StringGrid2: TStringGrid
-        Left = 24
+        Left = 16
         Top = 61
         Width = 314
         Height = 172
@@ -422,7 +422,7 @@ object Form1: TForm1
           20)
       end
       object Button12: TButton
-        Left = 344
+        Left = 376
         Top = 61
         Width = 75
         Height = 25
@@ -431,7 +431,7 @@ object Form1: TForm1
         OnClick = Button12Click
       end
       object FileNameEdit: TEdit
-        Left = 135
+        Left = 106
         Top = 29
         Width = 121
         Height = 21
@@ -439,7 +439,7 @@ object Form1: TForm1
         Text = 'veex number'
       end
       object Button13: TButton
-        Left = 344
+        Left = 376
         Top = 104
         Width = 75
         Height = 25
@@ -457,13 +457,79 @@ object Form1: TForm1
         OnClick = Button15Click
       end
       object Button16: TButton
-        Left = 24
+        Left = 16
         Top = 344
         Width = 75
         Height = 25
         Caption = 'Init OPM'
         TabOrder = 5
         OnClick = Button6Click
+      end
+      object CheckBoxCh850: TCheckBox
+        Left = 336
+        Top = 83
+        Width = 25
+        Height = 17
+        TabOrder = 6
+      end
+      object CheckBoxCh1300: TCheckBox
+        Left = 336
+        Top = 106
+        Width = 25
+        Height = 17
+        TabOrder = 7
+      end
+      object CheckBoxCh1310: TCheckBox
+        Left = 336
+        Top = 128
+        Width = 25
+        Height = 17
+        TabOrder = 8
+      end
+      object CheckBoxCh1490: TCheckBox
+        Left = 336
+        Top = 150
+        Width = 25
+        Height = 17
+        TabOrder = 9
+      end
+      object CheckBoxCh1550: TCheckBox
+        Left = 336
+        Top = 170
+        Width = 25
+        Height = 17
+        TabOrder = 10
+      end
+      object CheckBoxCh1625: TCheckBox
+        Left = 336
+        Top = 194
+        Width = 25
+        Height = 17
+        TabOrder = 11
+      end
+      object CheckBoxCh1650: TCheckBox
+        Left = 336
+        Top = 216
+        Width = 25
+        Height = 17
+        TabOrder = 12
+      end
+      object Button19: TButton
+        Left = 367
+        Top = 212
+        Width = 75
+        Height = 25
+        Caption = 'Change Coeff'
+        TabOrder = 13
+        OnClick = Button19Click
+      end
+      object CheckBoxEnableChange: TCheckBox
+        Left = 474
+        Top = 216
+        Width = 97
+        Height = 17
+        Caption = 'enable Change'
+        TabOrder = 14
       end
     end
     object TabSheet3: TTabSheet
