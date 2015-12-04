@@ -91,6 +91,7 @@ __published:	// IDE-managed Components
 	TCheckBox *CheckBoxCh1650;
 	TButton *Button19;
 	TCheckBox *CheckBoxEnableChange;
+	TButton *Button20;
 	void __fastcall initGPIBButtonClick(TObject *Sender);
 	void __fastcall Button3Click(TObject *Sender);
 	void __fastcall initInstrumentButtonClick(TObject *Sender);
@@ -121,6 +122,7 @@ __published:	// IDE-managed Components
 	void __fastcall Button17Click(TObject *Sender);
 	void __fastcall Button18Click(TObject *Sender);
 	void __fastcall Button19Click(TObject *Sender);
+	void __fastcall Button20Click(TObject *Sender);
 
 
 

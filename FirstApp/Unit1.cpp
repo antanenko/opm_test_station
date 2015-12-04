@@ -1032,3 +1032,9 @@ void __fastcall TForm1::Button19Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm1::Button20Click(TObject *Sender)
+{
+	my_deviceInfoProvider->releasePort();
+}
+//---------------------------------------------------------------------------
+

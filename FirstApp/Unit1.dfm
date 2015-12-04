@@ -73,7 +73,7 @@ object Form1: TForm1
     Top = 16
     Width = 596
     Height = 411
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     TabOrder = 3
     object TabSheet1: TTabSheet
       Caption = 'Manual mode'
@@ -530,6 +530,15 @@ object Form1: TForm1
         Height = 17
         Caption = 'enable Change'
         TabOrder = 14
+      end
+      object Button20: TButton
+        Left = 120
+        Top = 344
+        Width = 75
+        Height = 25
+        Caption = 'Release Port'
+        TabOrder = 15
+        OnClick = Button20Click
       end
     end
     object TabSheet3: TTabSheet
