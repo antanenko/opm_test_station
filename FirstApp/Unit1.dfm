@@ -73,7 +73,7 @@ object Form1: TForm1
     Top = 16
     Width = 596
     Height = 411
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     TabOrder = 3
     object TabSheet1: TTabSheet
       Caption = 'Manual mode'

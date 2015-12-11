@@ -156,7 +156,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 			  StringGrid1->Cells[1][i] = AnsiString(buf);
 		}
 		fscanf(f,"%s",pathForDb);
-
+		answerInsrtumentMemo->Lines->Add(AnsiString(pathForDb));
 		fclose(f);
 		}
 
@@ -386,6 +386,7 @@ void __fastcall TForm1::Button6Click(TObject *Sender)
 
 	   char bufsection[5];
 	   int len=160;
+	   int ret;
 	   for (int i = 0; i < nw; i++) {
 		 deviceWavelenght[i] = measurer->getWavelength(i);
 		 sprintf(buf,"Number %d is wavelenght %d",i,deviceWavelenght[i]);
@@ -395,15 +396,28 @@ void __fastcall TForm1::Button6Click(TObject *Sender)
 		 bufsection[1]=0;
 		 sprintf(buft,"%d",i);
 		 strcat(bufsection,buft);
-		 get_unit_param_raw(bufsn,bufsection,"KWln",buf,len);
-
-		 sscanf(buf,"%f",&deviceKoeff[i]);
-		 answerInsrtumentMemo->Lines->Add(buf);
+		 ret = get_unit_param_raw(bufsn,bufsection,"KWln",buf,len);
+		 if(ret==0)
+		 {
+		   sscanf(buf,"%f",&deviceKoeff[i]);
+		   answerInsrtumentMemo->Lines->Add(buf);
+		 } else
+		 {
+            answerInsrtumentMemo->Lines->Add("Can't read coeff from data base!!!");
+         }
 	   }
 
 	   numberOfWavelenghtInDevice = nw;
 
+	   // store Koeff for 850nm
+	   int indexInDevice;
 
+	   int res = ReturnDeviceIndexOfWave(850);
+	 //  int res = SetWorkingWaveLenght(0,&indexInDevice);
+	   if(res>=0)
+	   {
+		  result[0][3] = deviceKoeff[res];
+	   }
 
 	}
 
@@ -656,6 +670,7 @@ void __fastcall TForm1::Button12Click(TObject *Sender)
    char buf[100];
    int res;
    int indexInDevice;
+
    for(int i=1;i<n_wl;i++)    // skip 850nm
    {
 	   res = SetWorkingWaveLenght(i,&indexInDevice);
@@ -846,6 +861,9 @@ void __fastcall TForm1::Button14Click(TObject *Sender)
 			  file << buf;
 			}
 
+			file << pathForDb;
+			file << "\n";
+
 			file.close();
 		}
 }
@@ -887,9 +905,28 @@ void __fastcall TForm1::StringGrid2SetEditText(TObject *Sender, int ACol, int AR
 
 	   if(ARow==1)    // only for 850 nm
 	   {
-		 float pg = StrToFloat(AnsiString(StringGrid2->Cells[1][1]).c_str());
-		 float pfx = StrToFloat(AnsiString(StringGrid2->Cells[2][1]).c_str());
-		 float dl = pfx - pg;
+		 AnsiString tm;
+		 float pg, pfx, dl;
+		 tm = AnsiString(StringGrid2->Cells[1][1]);
+		 if(tm=="")
+		 {
+		   pg = 0.0;
+		 } else
+		 {
+			pg = StrToFloat(tm.c_str());
+		 }
+
+		 tm = AnsiString(StringGrid2->Cells[2][1]);
+		 if(tm=="")
+		 {
+		   pfx = 0.0;
+		 } else
+		 {
+			pfx = StrToFloat(tm.c_str());
+		 }
+
+
+		 dl = pfx - pg;
 
 		 result[0][0] = pg;
 		 result[0][1] = pfx;
@@ -990,6 +1027,7 @@ void __fastcall TForm1::Button19Click(TObject *Sender)
 	   {
 		 n=0;
 		 ChangeInDataBase(bufsn,n);
+		 answerInsrtumentMemo->Lines->Add("Coeff for 850nm updated! ");
 	   }
 
 	   ///////////////////////////////////////
@@ -997,37 +1035,45 @@ void __fastcall TForm1::Button19Click(TObject *Sender)
 	   {
 		 n=1;
 		 ChangeInDataBase(bufsn,n);
+		 answerInsrtumentMemo->Lines->Add("Coeff for 1300nm updated! ");
 	   }
 	   ///////////////////////////////////////
 	   if(CheckBoxCh1310->Checked)
 	   {
 		 n=2;
 		 ChangeInDataBase(bufsn,n);
+		 answerInsrtumentMemo->Lines->Add("Coeff for 1310nm updated! ");
 	   }
 	   ///////////////////////////////////////
 	   if(CheckBoxCh1490->Checked)
 	   {
 		 n=3;
 		 ChangeInDataBase(bufsn,n);
+		 answerInsrtumentMemo->Lines->Add("Coeff for 1490nm updated! ");
 	   }
 	   ///////////////////////////////////////
 	   if(CheckBoxCh1550->Checked)
 	   {
 		 n=4;
 		 ChangeInDataBase(bufsn,n);
+		 answerInsrtumentMemo->Lines->Add("Coeff for 1550nm updated! ");
 	   }
 	   ///////////////////////////////////////
 	   if(CheckBoxCh1625->Checked)
 	   {
 		 n=5;
 		 ChangeInDataBase(bufsn,n);
+		 answerInsrtumentMemo->Lines->Add("Coeff for 1625nm updated! ");
 	   }
 	   ///////////////////////////////////////
 	   if(CheckBoxCh1650->Checked)
 	   {
 		 n=6;
 		 ChangeInDataBase(bufsn,n);
+		 answerInsrtumentMemo->Lines->Add("Coeff for 1650nm updated! ");
 	   }
+
+	   CheckBoxEnableChange->Checked = false;
    }
 }
 //---------------------------------------------------------------------------
