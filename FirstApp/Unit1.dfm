@@ -391,6 +391,10 @@ object Form1: TForm1
     object TabSheet2: TTabSheet
       Caption = 'Auto mode'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Label6: TLabel
         Left = 16
         Top = 32
@@ -544,6 +548,10 @@ object Form1: TForm1
     object TabSheet3: TTabSheet
       Caption = 'TabSheet3'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Button17: TButton
         Left = 72
         Top = 112
