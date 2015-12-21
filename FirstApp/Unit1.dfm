@@ -68,13 +68,22 @@ object Form1: TForm1
     TabOrder = 2
     OnClick = Button11Click
   end
+  object Button14: TButton
+    Left = 762
+    Top = 352
+    Width = 75
+    Height = 25
+    Caption = 'Save to File'
+    TabOrder = 3
+    OnClick = Button14Click
+  end
   object PageControl1: TPageControl
     Left = 8
     Top = 16
     Width = 596
     Height = 411
     ActivePage = TabSheet1
-    TabOrder = 3
+    TabOrder = 4
     object TabSheet1: TTabSheet
       Caption = 'Manual mode'
       object Label1: TLabel
@@ -387,14 +396,19 @@ object Form1: TForm1
         TabOrder = 29
         Text = '192.168.100.171'
       end
+      object Button21: TButton
+        Left = 497
+        Top = 170
+        Width = 75
+        Height = 25
+        Caption = 'Set Zero'
+        TabOrder = 30
+        OnClick = Button21Click
+      end
     end
     object TabSheet2: TTabSheet
       Caption = 'Auto mode'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label6: TLabel
         Left = 16
         Top = 32
@@ -546,12 +560,8 @@ object Form1: TForm1
       end
     end
     object TabSheet3: TTabSheet
-      Caption = 'TabSheet3'
+      Caption = 'WaveLength'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Button17: TButton
         Left = 72
         Top = 112
@@ -571,14 +581,5 @@ object Form1: TForm1
         OnClick = Button18Click
       end
     end
-  end
-  object Button14: TButton
-    Left = 762
-    Top = 352
-    Width = 75
-    Height = 25
-    Caption = 'Save to File'
-    TabOrder = 4
-    OnClick = Button14Click
   end
 end

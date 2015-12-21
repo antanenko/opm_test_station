@@ -438,7 +438,7 @@ void __fastcall TForm1::Button7Click(TObject *Sender)
 		answerInsrtumentMemo->Lines->Add(str);
    } else
    {
-     answerInsrtumentMemo->Lines->Add("ERROR not init OPM");
+	 answerInsrtumentMemo->Lines->Add("ERROR not init OPM");
    }
 
 
@@ -1083,4 +1083,23 @@ void __fastcall TForm1::Button20Click(TObject *Sender)
 	my_deviceInfoProvider->releasePort();
 }
 //---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button21Click(TObject *Sender)
+{
+   if( flag_init_OPM)
+   {
+
+	 measurer->calibrateZero();
+
+	 answerInsrtumentMemo->Lines->Add("Set zero!");
+
+   } else
+   {
+	 answerInsrtumentMemo->Lines->Add("ERROR not init OPM");
+   }
+
+
+}
+//---------------------------------------------------------------------------
+
 
