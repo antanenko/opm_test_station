@@ -10,10 +10,6 @@
 #pragma hdrstop
 
 #define MAX_WL 7   // 850 1300 1310 1490 1550 1625 1650
-#define PM2_NUM_SKIP_WAVE 0
-#define PM1_NUM_SKIP_WAVE 1
-
-
 
 #define MAX_DELTA_SM 0.2
 #define MAX_DELTA_MM 0.3
@@ -34,11 +30,6 @@
 
 #define _WINSOCK2API_
 #include "w_tcp.h"
-//#include "x_Port.h"
-
-
-
-
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -52,7 +43,6 @@ TPort* Port;
 
 Measurer  *measurer;
 //OpmHandle handle;
-
 //DeviceConnectionRequest *mydeviceConnectionRequest;
 
 //---------------------------------------------------------------------------
@@ -65,100 +55,82 @@ __fastcall TForm1::TForm1(TComponent* Owner)
    dev_wlm = new instrumentWaveLenghtMeter();
 
 
- /*
+   char bufver[32];
 
-  char bufdb[1024*3];
-  int len=1024*3;
-  get_unit_string("546415", bufdb,len);
-  int len2;
-  len2 = strlen(bufdb);
+   TProjectRCVersion applVersion(NULL);
+   LPSTR fileVersion;
+   applVersion.GetFileVersion(fileVersion);
 
-  get_unit_param_raw("546415","W1","KWln",bufdb,len);
-  len2 = strlen(bufdb);
- */
+   sscanf(fileVersion,"%s",bufver);
+   Label8->Caption = AnsiString(bufver);
 
-	char bufver[32];
+   srand ( time(NULL) );
 
-	 TProjectRCVersion applVersion(NULL);
-	LPSTR fileVersion;
-	applVersion.GetFileVersion(fileVersion);
+   my_deviceInfoProvider = new DeviceInfoProvider("opm.dll");
 
-	sscanf(fileVersion,"%s",bufver);
+   LogFile = new TLogFile("test_station.log");
 
-	Label8->Caption = AnsiString(bufver);
+   n_wl = MAX_WL;
 
-	srand ( time(NULL) );
+   num_wl[0] = "850";
+   num_wl[1] = "1300";
+   num_wl[2] = "1310";
+   num_wl[3] = "1490";
+   num_wl[4] = "1550";
+   num_wl[5] = "1625";
+   num_wl[6] = "1650";
 
+   StringGrid1->RowCount = n_wl;
 
- my_deviceInfoProvider = new DeviceInfoProvider(
-			"opm.dll");
-
-  LogFile = new TLogFile("test_station.log");
-
-  n_wl = MAX_WL;
-
-  num_wl[0] = "850";
-  num_wl[1] = "1300";
-  num_wl[2] = "1310";
-  num_wl[3] = "1490";
-  num_wl[4] = "1550";
-  num_wl[5] = "1625";
-  num_wl[6] = "1650";
-
-  StringGrid1->RowCount = n_wl;
-
-  flag_init_OPM = false;
-  flag_init_TLS = false;
-  flag_init_GOLDOPM = false;
+   flag_init_OPM = false;
+   flag_init_TLS = false;
+   flag_init_GOLDOPM = false;
 
    StringGrid2->Cells[1][0] = "Gold";
    StringGrid2->Cells[2][0] = "FX-40/45";
    StringGrid2->Cells[3][0] = "Delta";
    StringGrid2->Cells[4][0] = "Note";
 
-  for(int i=0;i<n_wl;i++)
-  {
-	StringGrid1->Cells[0][i] = num_wl[i];
+   for(int i=0;i<n_wl;i++)
+   {
+	 StringGrid1->Cells[0][i] = num_wl[i];
+	 StringGrid2->Cells[0][i+1] = num_wl[i];
 
-	StringGrid2->Cells[0][i+1] = num_wl[i];
+	 wchar_t * UnicodeString = new wchar_t[4]; /* массив-получатель */
+	 mbstowcs(UnicodeString,num_wl[i].c_str(), 4);
 
-	wchar_t * UnicodeString = new wchar_t[4]; /* массив-получатель */
-	mbstowcs(UnicodeString,num_wl[i].c_str(), 4);
-
-	RadioGroup1->Items->Add(UnicodeString);
+	 RadioGroup1->Items->Add(UnicodeString);
 
  //	delete [] UnicodeString;
 
-	result[i][0] = 0.0;
-	result[i][1] = 0.0;
-	result[i][2] = 0.0;
+	 result[i][0] = 0.0;
+	 result[i][1] = 0.0;
+	 result[i][2] = 0.0;
 
-  }
-  RadioGroup1->ItemIndex = 1;
+   }
+   RadioGroup1->ItemIndex = 1;
 
-  char buf[16];
+   char buf[16];
 
-  std::ofstream file;
+   std::ofstream file;
 
-  FILE *f;
+   FILE *f;
 
-  f = fopen("delta.txt","r");
-  if(f)
-  {
+   f = fopen("delta.txt","r");
+   if(f)
+   {
+	 fscanf(f,"%s",pathForResult);
+	 for(int i=0;i<n_wl;i++)
+	 {
+	   fscanf(f, "%f",&delta_array[i]);
+	   sprintf(buf, "%.4f",delta_array[i]);
 
-		fscanf(f,"%s",pathForResult);
-		for(int i=0;i<n_wl;i++)
-		{
-			  fscanf(f, "%f",&delta_array[i]);
-
-			  sprintf(buf, "%.4f",delta_array[i]);
-
-			  StringGrid1->Cells[1][i] = AnsiString(buf);
-		}
-		fscanf(f,"%s",pathForDb);
-		answerInsrtumentMemo->Lines->Add(AnsiString(pathForDb));
-		fclose(f);
-		}
+	   StringGrid1->Cells[1][i] = AnsiString(buf);
+	 }
+	 fscanf(f,"%s",pathForDb);
+	 answerInsrtumentMemo->Lines->Add(AnsiString(pathForDb));
+	 fclose(f);
+   }
 
    f = fopen(pathForDb,"r");
    if(f)
@@ -168,7 +140,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 	  fclose(f);
    } else
    {
-	   answerInsrtumentMemo->Lines->Add("!!! Can't open database file!");
+	  answerInsrtumentMemo->Lines->Add("!!! Can't open database file!");
    }
 
 }
@@ -177,63 +149,51 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 {
    delete dev;
    delete dev_lsr;
-
    delete dev_wlm;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::initGPIBButtonClick(TObject *Sender)
 {
-	int a;
-
 	dev->setAdressGPIB(StrToInt(adressGPIB->Text));
-	a = dev->GPIBInit();
+	int a = dev->GPIBInit();
 
 	answerInsrtumentMemo->Lines->Add("Answer " + IntToStr(a));
-  //	Label1->Caption = IntToStr(a);
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button3Click(TObject *Sender)
+void __fastcall TForm1::buttonIDNPowerMeterClick(TObject *Sender)
 {
-   int a;
    char buf[256];
-   a = dev->checkIDN(buf);
+   int a = dev->checkIDN(buf);
 
-   if(!a){
-  // answerInsrtumentMemo->Lines->Add("My TEST");
-
-   answerInsrtumentMemo->Lines->Add(buf);
+   if(!a)
+   {
+	 answerInsrtumentMemo->Lines->Add(buf);
    }
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TForm1::initInstrumentButtonClick(TObject *Sender)
 {
-	int a;
-
 	dev->setAdressInstrument(StrToInt(adressInstrument->Text),0);
-	a = dev->instrumnetConnect();
+	int a = dev->instrumnetConnect();
 
 	answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
-  //	Label1->Caption = IntToStr(a);
-   if ( a==0 ) flag_init_GOLDOPM = true;
 
+	if ( a==0 )
+	  flag_init_GOLDOPM = true;
 }
-//---------------------------------------------------------------------------
-
-void __fastcall TForm1::Button1Click(TObject *Sender)
+//--------------------------------------------------------------------------
+void __fastcall TForm1::buttonDBmClick(TObject *Sender)
 {
-   int a;
-   a = dev->setUnit(StrToInt(slotNumber->Text),dBm);
+   int a = dev->setUnit(StrToInt(slotNumber->Text),dBm);
    answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button2Click(TObject *Sender)
+void __fastcall TForm1::buttonPowerClick(TObject *Sender)
 {
-   int a;
    char buf[256];
-   a = dev->returnPower(StrToInt(slotNumber->Text),buf);
+   int a = dev->returnPower(StrToInt(slotNumber->Text),buf);
 
    if(!a)
    {
@@ -247,65 +207,54 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button4Click(TObject *Sender)
+void __fastcall TForm1::buttonWattClick(TObject *Sender)
 {
-   int a;
-   a = dev->setUnit(StrToInt(slotNumber->Text),WATT);
+   int a = dev->setUnit(StrToInt(slotNumber->Text),WATT);
    answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button5Click(TObject *Sender)
+void __fastcall TForm1::buttonSwitchClick(TObject *Sender)
 {
-	int a;
-	a = dev->opticalSwitch(StrToInt(switchEdit->Text));
-    answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
+   int a = dev->opticalSwitch(StrToInt(switchEdit->Text));
+   answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::waveLenghtButtonClick(TObject *Sender)
 {
-   int a;
-
-   a = dev->setWavelenght(StrToInt(slotNumber->Text),AnsiString(waveLenghtEdit->Text).c_str());
+   int a = dev->setWavelenght(StrToInt(slotNumber->Text),AnsiString(waveLenghtEdit->Text).c_str());
    answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::buttonInitLaserClick(TObject *Sender)
 {
-	int a;
-
 	dev_lsr->setAdressInstrument(StrToInt(laserAdress->Text),0);
-	a = dev_lsr->instrumnetConnect();
+	int a = dev_lsr->instrumnetConnect();
 
 	answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
 
-	if ( a==0 ) flag_init_TLS = true;
+	if ( a==0 )
+		flag_init_TLS = true;
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::laserWaveButtonClick(TObject *Sender)
 {
-  int a;
-
-   a = dev_lsr->setWavelenght(AnsiString(laserWave->Text).c_str());
+   int a = dev_lsr->setWavelenght(AnsiString(laserWave->Text).c_str());
    answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
-
-
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::buttonIDNLaserClick(TObject *Sender)
 {
-  int a;
    char buf[256];
-   a = dev_lsr->checkIDN(buf);
+   int a = dev_lsr->checkIDN(buf);
 
-   if(!a){
-  // answerInsrtumentMemo->Lines->Add("My TEST");
-
-   answerInsrtumentMemo->Lines->Add(buf);
+   if(!a)
+   {
+	 answerInsrtumentMemo->Lines->Add(buf);
    }
 }
 //---------------------------------------------------------------------------
@@ -321,15 +270,14 @@ void __fastcall TForm1::CheckBox1Click(TObject *Sender)
    {
 	 a = dev_lsr->disable();
    }
-
    answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
 }
 //---------------------------------------------------------------------------
 
 
-void __fastcall TForm1::Button6Click(TObject *Sender)
+void __fastcall TForm1::buttonInitOPMClick(TObject *Sender)
 {
-	 flag_init_OPM = true;
+
 	int nw;
 	try{
 
@@ -358,22 +306,9 @@ void __fastcall TForm1::Button6Click(TObject *Sender)
 	}else
 	{
 	   answerInsrtumentMemo->Lines->Add("Init is OK");
-
+	   flag_init_OPM = true;
 
 	   nw = measurer->getWavelengthsNum();
-
-	   type_pm = 0;
-	   if(nw==7)
-	   {
-		 answerInsrtumentMemo->Lines->Add("opm is PM2");
-		 type_pm = PM2_NUM_SKIP_WAVE;
-	   }
-	   if(nw==8)
-	   {
-		 answerInsrtumentMemo->Lines->Add("opm is PM1");
-		 type_pm = PM1_NUM_SKIP_WAVE;
-	   }
-
 
 	   char buf[160],bufsn[160],buft[4];
 	   numberDevice = measurer->getOpticalModuleSerialNumber();
@@ -410,23 +345,17 @@ void __fastcall TForm1::Button6Click(TObject *Sender)
 	   numberOfWavelenghtInDevice = nw;
 
 	   // store Koeff for 850nm
-	   int indexInDevice;
-
 	   int res = ReturnDeviceIndexOfWave(850);
-	 //  int res = SetWorkingWaveLenght(0,&indexInDevice);
 	   if(res>=0)
 	   {
 		  result[0][3] = deviceKoeff[res];
 	   }
 
 	}
-
-
-
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button7Click(TObject *Sender)
+void __fastcall TForm1::ButtonReadOPMClick(TObject *Sender)
 {
    if( flag_init_OPM)
    {
@@ -440,59 +369,39 @@ void __fastcall TForm1::Button7Click(TObject *Sender)
    {
 	 answerInsrtumentMemo->Lines->Add("ERROR not init OPM");
    }
-
-
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button8Click(TObject *Sender)
+void __fastcall TForm1::buttonSetWavelenghtClick(TObject *Sender)
 {
-	int a;
-	int indexInDevice;
-	char wl[10];
+   int a;
+   int indexInDevice;
    int wlnumber;
 
-   strcpy( wl, num_wl[RadioGroup1->ItemIndex].c_str());
-   wlnumber = StrToInt(wl);
+   wlnumber = StrToInt(num_wl[RadioGroup1->ItemIndex].c_str());
 
- 	  if( flag_init_OPM )
+   if( flag_init_OPM )
+   {
+	  indexInDevice = ReturnDeviceIndexOfWave(wlnumber);
+	  if(indexInDevice>=0)
 	  {
-		 bool flag_present_wave = false;
-		 for(int i = 0; i < numberOfWavelenghtInDevice; i++)
-		 {
-			 if(wlnumber == deviceWavelenght[i] )
-			 {
-				 flag_present_wave = true;
-				 indexInDevice = i;
-				 break;
-			 }
-		 }
-		 if( flag_present_wave )
-		 {
-		   // measurer->switchWavelengthByIndex(index + type_pm);
-			  measurer->switchWavelengthByIndex(indexInDevice);
-			  answerInsrtumentMemo->Lines->Add("Ok");
-		 } else
-		 {
-			answerInsrtumentMemo->Lines->Add("!!! Power meter not support this wavelengh");
-
-		 }
-	   //	 measurer->switchWavelengthByValue(StrToInt(num_wl[index].c_str()));
-	  } else
+		 measurer->switchWavelengthByIndex(indexInDevice);
+		 answerInsrtumentMemo->Lines->Add("Ok set wavelenght");
+	  }
+	  else
 	  {
-		answerInsrtumentMemo->Lines->Add("!!! OPM not init");
-
+		 answerInsrtumentMemo->Lines->Add("!!! Power meter not support this wavelengh");
 	  }
 
+   } else
+   {
+	  answerInsrtumentMemo->Lines->Add("!!! OPM not init");
+   }
 
-
-
- //  measurer->switchWavelengthByValue(StrToInt(num_wl[RadioGroup1->ItemIndex].c_str()));
-//   measurer->switchWavelengthByIndex(RadioGroup1->ItemIndex + type_pm);
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button9Click(TObject *Sender)
+void __fastcall TForm1::buttonReadTwoClick(TObject *Sender)
 {
 
    ReadPower(RadioGroup1->ItemIndex);
@@ -500,35 +409,29 @@ void __fastcall TForm1::Button9Click(TObject *Sender)
 
    if(!ReadTwoPorts->Checked)
    {
-
 	  sprintf(buf, "gold=%.3f fx40=%.3f delta=%.3f", pwr_gold,pwr,delta );
-
    } else
    {
 	  sprintf(buf, "agilent1=%.4f agilent2=%.4f delta=%.4f", pwr_gold,pwr,delta );
-
    }
    answerInsrtumentMemo->Lines->Add(buf);
 }
 //---------------------------------------------------------------------------
 // Set wave for all button
-void __fastcall TForm1::Button10Click(TObject *Sender)
+void __fastcall TForm1::buttonSetWaveForAllClick(TObject *Sender)
 {
    int indexInDevice;
    SetWorkingWaveLenght(RadioGroup1->ItemIndex,&indexInDevice);
-
 }
 //---------------------------------------------------------------------------
 // Store delta button
-void __fastcall TForm1::Button11Click(TObject *Sender)
+void __fastcall TForm1::buttonStoreDeltaClick(TObject *Sender)
 {
    delta_array[RadioGroup1->ItemIndex] = delta;
 
    char buf[10];
 
-
    sprintf(buf, "%.4f",delta);
-
    StringGrid1->Cells[1][RadioGroup1->ItemIndex] = AnsiString(buf);
 }
 //---------------------------------------------------------------------------
@@ -549,7 +452,7 @@ int TForm1::SetWorkingWaveLenght(int index,int *indexInDevice)
 {
 	int a;
  //	int indexInDevice;
-  char wl[10];
+   char wl[10];
    int wlnumber;
 
    strcpy( wl, num_wl[index].c_str());
@@ -580,7 +483,6 @@ int TForm1::SetWorkingWaveLenght(int index,int *indexInDevice)
 
 		 if( (*indexInDevice)>=0 )
 		 {
-
 			  measurer->switchWavelengthByIndex(*indexInDevice);
 			  answerInsrtumentMemo->Lines->Add("Ok");
 		 } else
@@ -588,10 +490,6 @@ int TForm1::SetWorkingWaveLenght(int index,int *indexInDevice)
 			answerInsrtumentMemo->Lines->Add("!!! Power meter not support this wavelengh");
 			return 2;
 		 }
-
-
-
-	   //	 measurer->switchWavelengthByValue(StrToInt(num_wl[index].c_str()));
 	  } else
 	  {
 		answerInsrtumentMemo->Lines->Add("!!! OPM not init");
@@ -665,7 +563,7 @@ void __fastcall TForm1::StringGrid1SetEditText(TObject *Sender, int ACol, int AR
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button12Click(TObject *Sender)
+void __fastcall TForm1::ButtonStartClick(TObject *Sender)
 {
    char buf[100];
    int res;
@@ -717,9 +615,10 @@ void __fastcall TForm1::Button12Click(TObject *Sender)
    if(flag_init_TLS)
    {
 	 a = dev_lsr->setWavelenght("1300");
+	 answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
    }
 
-   answerInsrtumentMemo->Lines->Add("Instrument Answer " + IntToStr(a));
+
 
    answerInsrtumentMemo->Lines->Add("----------FINISHED-----------");
 
@@ -759,7 +658,7 @@ void TForm1::UpdateResultTable()
    }
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Button13Click(TObject *Sender)
+void __fastcall TForm1::buttonSaveResultClick(TObject *Sender)
 {
 	struct date d;
 	getdate(&d);
@@ -843,7 +742,7 @@ void __fastcall TForm1::Button13Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button14Click(TObject *Sender)
+void __fastcall TForm1::buttonSaveDeltaToFileClick(TObject *Sender)
 {
 
    char buf[20];
@@ -869,7 +768,7 @@ void __fastcall TForm1::Button14Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 // button generate
-void __fastcall TForm1::Button15Click(TObject *Sender)
+void __fastcall TForm1::buttonGenerateFakeClick(TObject *Sender)
 {
   generateFakeResult();
 
@@ -948,6 +847,7 @@ void __fastcall TForm1::StringGrid2SetEditText(TObject *Sender, int ACol, int AR
 	}
 
 }
+//---------------------------------------------------------------------------
 
 void __fastcall TForm1::typeConnectionClick(TObject *Sender)
 {
@@ -961,7 +861,6 @@ void __fastcall TForm1::typeConnectionClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
-
 
 void __fastcall TForm1::Button17Click(TObject *Sender)
 {
@@ -1010,9 +909,8 @@ void TForm1::ChangeInDataBase(char *buffSerialNumber,int n)
 	  modify_unit_parameter_double(buffSerialNumber,bufsection,"KWln",result[n][3]-result[n][2]);
    }
 }
-
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Button19Click(TObject *Sender)
+void __fastcall TForm1::buttonChangeCoeffClick(TObject *Sender)
 {
    if(CheckBoxEnableChange->Checked)
    {
@@ -1077,28 +975,21 @@ void __fastcall TForm1::Button19Click(TObject *Sender)
    }
 }
 //---------------------------------------------------------------------------
-
-void __fastcall TForm1::Button20Click(TObject *Sender)
+void __fastcall TForm1::buttonReleasePortClick(TObject *Sender)
 {
 	my_deviceInfoProvider->releasePort();
 }
 //---------------------------------------------------------------------------
-
-void __fastcall TForm1::Button21Click(TObject *Sender)
+void __fastcall TForm1::ButtonSetZeroClick(TObject *Sender)
 {
    if( flag_init_OPM)
    {
-
 	 measurer->calibrateZero();
-
 	 answerInsrtumentMemo->Lines->Add("Set zero!");
-
    } else
    {
 	 answerInsrtumentMemo->Lines->Add("ERROR not init OPM");
    }
-
-
 }
 //---------------------------------------------------------------------------
 

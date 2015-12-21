@@ -59,33 +59,34 @@ object Form1: TForm1
       20
       20)
   end
-  object Button11: TButton
+  object buttonStoreDelta: TButton
     Left = 762
     Top = 398
     Width = 75
     Height = 25
     Caption = 'Store delta'
     TabOrder = 2
-    OnClick = Button11Click
+    OnClick = buttonStoreDeltaClick
   end
-  object Button14: TButton
+  object buttonSaveDeltaToFile: TButton
     Left = 762
     Top = 352
     Width = 75
     Height = 25
     Caption = 'Save to File'
     TabOrder = 3
-    OnClick = Button14Click
+    OnClick = buttonSaveDeltaToFileClick
   end
   object PageControl1: TPageControl
     Left = 8
     Top = 16
     Width = 596
     Height = 411
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     TabOrder = 4
     object TabSheet1: TTabSheet
       Caption = 'Manual mode'
+      ExplicitLeft = -52
       object Label1: TLabel
         Left = 11
         Top = 19
@@ -109,58 +110,24 @@ object Form1: TForm1
       end
       object Label3: TLabel
         Left = 20
-        Top = 199
+        Top = 206
         Width = 18
         Height = 13
         Caption = 'Slot'
       end
       object Label4: TLabel
         Left = 20
-        Top = 234
+        Top = 241
         Width = 31
         Height = 13
         Caption = 'Switch'
-      end
-      object Label9: TLabel
-        Left = 214
-        Top = 132
-        Width = 43
-        Height = 13
-        Caption = 'ip adress'
-      end
-      object Button6: TButton
-        Left = 20
-        Top = 139
-        Width = 88
-        Height = 25
-        Caption = 'init OPM'
-        TabOrder = 0
-        OnClick = Button6Click
-      end
-      object Button7: TButton
-        Left = 353
-        Top = 139
-        Width = 105
-        Height = 25
-        Caption = 'Read OPM'
-        TabOrder = 1
-        OnClick = Button7Click
-      end
-      object Button8: TButton
-        Left = 467
-        Top = 139
-        Width = 105
-        Height = 25
-        Caption = 'set Wavelenght'
-        TabOrder = 2
-        OnClick = Button8Click
       end
       object adressGPIB: TEdit
         Left = 81
         Top = 16
         Width = 32
         Height = 21
-        TabOrder = 3
+        TabOrder = 0
         Text = '0'
       end
       object initGPIBButton: TButton
@@ -169,7 +136,7 @@ object Form1: TForm1
         Width = 89
         Height = 25
         Caption = 'Init GPIB'
-        TabOrder = 4
+        TabOrder = 1
         OnClick = initGPIBButtonClick
       end
       object adressInstrument: TEdit
@@ -177,7 +144,7 @@ object Form1: TForm1
         Top = 56
         Width = 32
         Height = 21
-        TabOrder = 5
+        TabOrder = 2
         Text = '10'
       end
       object initInstrumentButton: TButton
@@ -186,7 +153,7 @@ object Form1: TForm1
         Width = 89
         Height = 25
         Caption = 'Init Instrument'
-        TabOrder = 6
+        TabOrder = 3
         OnClick = initInstrumentButtonClick
       end
       object laserAdress: TEdit
@@ -194,7 +161,7 @@ object Form1: TForm1
         Top = 90
         Width = 32
         Height = 21
-        TabOrder = 7
+        TabOrder = 4
         Text = '5'
       end
       object buttonInitLaser: TButton
@@ -203,17 +170,17 @@ object Form1: TForm1
         Width = 89
         Height = 25
         Caption = 'Init Instrument'
-        TabOrder = 8
+        TabOrder = 5
         OnClick = buttonInitLaserClick
       end
-      object Button3: TButton
+      object buttonIDNPowerMeter: TButton
         Left = 264
         Top = 50
         Width = 71
         Height = 25
         Caption = 'IDN'
-        TabOrder = 9
-        OnClick = Button3Click
+        TabOrder = 6
+        OnClick = buttonIDNPowerMeterClick
       end
       object buttonIDNLaser: TButton
         Left = 264
@@ -221,114 +188,114 @@ object Form1: TForm1
         Width = 71
         Height = 25
         Caption = 'IDN'
-        TabOrder = 10
+        TabOrder = 7
         OnClick = buttonIDNLaserClick
       end
       object slotNumber: TEdit
         Left = 54
-        Top = 196
+        Top = 203
         Width = 30
         Height = 21
-        TabOrder = 11
+        TabOrder = 8
         Text = '1'
       end
-      object Button1: TButton
+      object buttonDBm: TButton
         Left = 97
-        Top = 195
+        Top = 202
         Width = 45
         Height = 25
         Caption = 'dBm'
-        TabOrder = 12
-        OnClick = Button1Click
+        TabOrder = 9
+        OnClick = buttonDBmClick
       end
-      object Button4: TButton
+      object buttonWatt: TButton
         Left = 148
-        Top = 195
+        Top = 202
         Width = 45
         Height = 25
         Caption = 'Watt'
-        TabOrder = 13
-        OnClick = Button4Click
+        TabOrder = 10
+        OnClick = buttonWattClick
       end
-      object Button2: TButton
+      object buttonPower: TButton
         Left = 199
-        Top = 195
+        Top = 202
         Width = 96
         Height = 25
-        Caption = 'Power'
-        TabOrder = 14
-        OnClick = Button2Click
+        Caption = 'read Power'
+        TabOrder = 11
+        OnClick = buttonPowerClick
       end
       object switchEdit: TEdit
         Left = 57
-        Top = 231
+        Top = 238
         Width = 25
         Height = 21
-        TabOrder = 15
+        TabOrder = 12
         Text = '1'
       end
-      object Button5: TButton
+      object buttonSwitch: TButton
         Left = 88
-        Top = 226
+        Top = 233
         Width = 75
         Height = 25
         Caption = 'Switch'
-        TabOrder = 16
-        OnClick = Button5Click
+        TabOrder = 13
+        OnClick = buttonSwitchClick
       end
       object waveLenghtEdit: TEdit
         Left = 312
-        Top = 195
+        Top = 202
         Width = 42
         Height = 21
-        TabOrder = 17
+        TabOrder = 14
         Text = '1550'
       end
       object waveLenghtButton: TButton
         Left = 383
-        Top = 195
+        Top = 202
         Width = 75
         Height = 25
         Caption = 'Wavelenght'
-        TabOrder = 18
+        TabOrder = 15
         OnClick = waveLenghtButtonClick
       end
       object RadioGroup1: TRadioGroup
         Left = 19
-        Top = 258
+        Top = 270
         Width = 140
         Height = 103
         Caption = 'Wave OPM'
         Columns = 2
-        TabOrder = 19
+        TabOrder = 16
       end
-      object Button10: TButton
+      object buttonSetWaveForAll: TButton
         Left = 169
-        Top = 271
+        Top = 283
         Width = 101
         Height = 25
         Caption = 'Set wave for all'
-        TabOrder = 20
-        OnClick = Button10Click
+        TabOrder = 17
+        OnClick = buttonSetWaveForAllClick
       end
-      object Button9: TButton
+      object buttonReadTwo: TButton
         Left = 169
-        Top = 311
+        Top = 323
         Width = 101
         Height = 25
         Caption = 'Read two'
-        TabOrder = 21
-        OnClick = Button9Click
+        TabOrder = 18
+        OnClick = buttonReadTwoClick
       end
       object CheckBox2: TCheckBox
         Left = 169
-        Top = 342
+        Top = 354
         Width = 97
         Height = 17
         Caption = 'Use store delta'
         Checked = True
         State = cbChecked
-        TabOrder = 22
+        TabOrder = 19
       end
       object CheckBox1: TCheckBox
         Left = 341
@@ -336,7 +303,7 @@ object Form1: TForm1
         Width = 120
         Height = 17
         Caption = 'Enable/Disable laser'
-        TabOrder = 23
+        TabOrder = 20
         OnClick = CheckBox1Click
       end
       object laserWave: TEdit
@@ -344,7 +311,7 @@ object Form1: TForm1
         Top = 88
         Width = 38
         Height = 21
-        TabOrder = 24
+        TabOrder = 21
         Text = '1550'
       end
       object laserWaveButton: TButton
@@ -353,57 +320,99 @@ object Form1: TForm1
         Width = 75
         Height = 25
         Caption = 'Wavelenght'
-        TabOrder = 25
+        TabOrder = 22
         OnClick = laserWaveButtonClick
       end
       object ControlTLS: TCheckBox
         Left = 293
-        Top = 275
+        Top = 287
         Width = 75
         Height = 17
         Caption = 'control  TLS'
         Checked = True
         State = cbChecked
-        TabOrder = 26
+        TabOrder = 23
       end
       object ReadTwoPorts: TCheckBox
         Left = 293
-        Top = 315
+        Top = 327
         Width = 146
         Height = 17
         Caption = 'Read from 2 port Agilent'
-        TabOrder = 27
+        TabOrder = 24
       end
-      object typeConnection: TRadioGroup
-        Left = 114
-        Top = 119
-        Width = 79
-        Height = 53
-        Caption = 'conection'
-        ItemIndex = 0
-        Items.Strings = (
-          'USB'
-          'TCP')
-        TabOrder = 28
-        OnClick = typeConnectionClick
-      end
-      object ipAdressText: TEdit
-        Left = 214
-        Top = 151
-        Width = 99
-        Height = 21
-        Enabled = False
-        TabOrder = 29
-        Text = '192.168.100.171'
-      end
-      object Button21: TButton
-        Left = 497
-        Top = 170
-        Width = 75
-        Height = 25
-        Caption = 'Set Zero'
-        TabOrder = 30
-        OnClick = Button21Click
+      object GroupBox1: TGroupBox
+        Left = 11
+        Top = 117
+        Width = 571
+        Height = 72
+        Caption = 'OPM function'
+        TabOrder = 25
+        object Label9: TLabel
+          Left = 166
+          Top = 19
+          Width = 43
+          Height = 13
+          Caption = 'ip adress'
+        end
+        object ButtonSetZero: TButton
+          Left = 487
+          Top = 40
+          Width = 75
+          Height = 25
+          Caption = 'Set Zero'
+          TabOrder = 0
+          OnClick = ButtonSetZeroClick
+        end
+        object buttonSetWavelenght: TButton
+          Left = 455
+          Top = 11
+          Width = 105
+          Height = 25
+          Caption = 'set Wavelenght'
+          TabOrder = 1
+          OnClick = buttonSetWavelenghtClick
+        end
+        object ButtonReadOPM: TButton
+          Left = 342
+          Top = 11
+          Width = 78
+          Height = 25
+          Caption = 'Read OPM'
+          TabOrder = 2
+          OnClick = ButtonReadOPMClick
+        end
+        object buttonInitOPM: TButton
+          Left = 6
+          Top = 19
+          Width = 67
+          Height = 25
+          Caption = 'init OPM'
+          TabOrder = 3
+          OnClick = buttonInitOPMClick
+        end
+        object typeConnection: TRadioGroup
+          Left = 79
+          Top = 11
+          Width = 73
+          Height = 52
+          Caption = 'conection'
+          ItemIndex = 0
+          Items.Strings = (
+            'USB'
+            'TCP')
+          TabOrder = 4
+          OnClick = typeConnectionClick
+        end
+        object ipAdressText: TEdit
+          Left = 166
+          Top = 38
+          Width = 99
+          Height = 21
+          Enabled = False
+          TabOrder = 5
+          Text = '192.168.100.171'
+        end
       end
     end
     object TabSheet2: TTabSheet
@@ -439,14 +448,14 @@ object Form1: TForm1
           20
           20)
       end
-      object Button12: TButton
+      object ButtonStart: TButton
         Left = 376
         Top = 61
         Width = 75
         Height = 25
         Caption = 'Start'
         TabOrder = 1
-        OnClick = Button12Click
+        OnClick = ButtonStartClick
       end
       object FileNameEdit: TEdit
         Left = 106
@@ -456,32 +465,32 @@ object Form1: TForm1
         TabOrder = 2
         Text = 'veex number'
       end
-      object Button13: TButton
+      object buttonSaveResult: TButton
         Left = 376
         Top = 104
         Width = 75
         Height = 25
         Caption = 'Save result'
         TabOrder = 3
-        OnClick = Button13Click
+        OnClick = buttonSaveResultClick
       end
-      object Button15: TButton
+      object buttonGenerateFake: TButton
         Left = 496
         Top = 344
         Width = 75
         Height = 25
         Caption = 'Generate'
         TabOrder = 4
-        OnClick = Button15Click
+        OnClick = buttonGenerateFakeClick
       end
-      object Button16: TButton
+      object buttonInitOPMAutoMode: TButton
         Left = 16
         Top = 344
         Width = 75
         Height = 25
         Caption = 'Init OPM'
         TabOrder = 5
-        OnClick = Button6Click
+        OnClick = buttonInitOPMClick
       end
       object CheckBoxCh850: TCheckBox
         Left = 336
@@ -532,14 +541,14 @@ object Form1: TForm1
         Height = 17
         TabOrder = 12
       end
-      object Button19: TButton
-        Left = 367
+      object buttonChangeCoeff: TButton
+        Left = 375
         Top = 212
         Width = 75
         Height = 25
         Caption = 'Change Coeff'
         TabOrder = 13
-        OnClick = Button19Click
+        OnClick = buttonChangeCoeffClick
       end
       object CheckBoxEnableChange: TCheckBox
         Left = 474
@@ -549,14 +558,14 @@ object Form1: TForm1
         Caption = 'enable Change'
         TabOrder = 14
       end
-      object Button20: TButton
+      object buttonReleasePort: TButton
         Left = 120
         Top = 344
         Width = 75
         Height = 25
         Caption = 'Release Port'
         TabOrder = 15
-        OnClick = Button20Click
+        OnClick = buttonReleasePortClick
       end
     end
     object TabSheet3: TTabSheet
