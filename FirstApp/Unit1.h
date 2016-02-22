@@ -12,6 +12,8 @@
 #include "DeviceConnectionRequest.h"
 
 #include "deviceInfoProvider.h"
+#include "MyThread.h"
+#include "../DllAPp/dllMainInc.h"
 
 
 //---------------------------------------------------------------------------
@@ -23,6 +25,10 @@
 #include <ExtCtrls.hpp>
 #include <Grids.hpp>
 #include <ComCtrls.hpp>
+#include "Chart.hpp"
+#include "Series.hpp"
+#include "TeEngine.hpp"
+#include "TeeProcs.hpp"
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -84,8 +90,6 @@ __published:	// IDE-managed Components
 	TCheckBox *CheckBoxEnableChange;
 	TButton *buttonReleasePort;
 	TTabSheet *TabSheet3;
-	TButton *Button17;
-	TButton *Button18;
 	TGroupBox *GroupBox1;
 	TButton *ButtonSetZero;
 	TButton *buttonSetWavelenght;
@@ -94,6 +98,24 @@ __published:	// IDE-managed Components
 	TRadioGroup *typeConnection;
 	TLabel *Label9;
 	TEdit *ipAdressText;
+	TChart *Chart1;
+	TLineSeries *Series1;
+	TLabel *Label10;
+	TLabel *Label11;
+	TEdit *EditTime;
+	TLabel *Label12;
+	TEdit *EditPeriod;
+	TLabel *Label13;
+	TLabel *Label14;
+	TButton *ButtonStartThread;
+	TButton *ButtonStopThread;
+	TLabel *LabelMin;
+	TLabel *LabelMax;
+	TTabSheet *TabSheet4;
+	TButton *Button18;
+	TButton *Button17;
+	TButton *ButtonClearLog;
+
 	void __fastcall initGPIBButtonClick(TObject *Sender);
 	void __fastcall buttonIDNPowerMeterClick(TObject *Sender);
 	void __fastcall initInstrumentButtonClick(TObject *Sender);
@@ -126,11 +148,20 @@ __published:	// IDE-managed Components
 	void __fastcall buttonChangeCoeffClick(TObject *Sender);
 	void __fastcall buttonReleasePortClick(TObject *Sender);
 	void __fastcall ButtonSetZeroClick(TObject *Sender);
+	void __fastcall ButtonStartThreadClick(TObject *Sender);
+	void __fastcall ButtonStopThreadClick(TObject *Sender);
+	void __fastcall ButtonClearLogClick(TObject *Sender);
+
 
 
 
 private:	// User declarations
   //  std::auto_ptr<DeviceInfoProvider> deviceInfoProvider;
+	instrumentPowerMeter *dev;
+	instrumentTunableLaserSource *dev_lsr;
+	instrumentWaveLenghtMeter *dev_wlm;
+
+
 	int n_wl;
 	AnsiString num_wl[MAX_WL];
 
@@ -164,6 +195,9 @@ private:	// User declarations
 	void generateFakeResult();
 
 	DeviceInfoProvider *my_deviceInfoProvider;
+
+	int sec;
+	MyThread *tth;
    //	DeviceConnectionRequest *mydeviceConnectionRequest;
  //	Measurer *my_measurer;
 

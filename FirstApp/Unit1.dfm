@@ -15,18 +15,24 @@ object Form1: TForm1
   PixelsPerInch = 96
   TextHeight = 13
   object Label7: TLabel
-    Left = 616
-    Top = 278
+    Left = 610
+    Top = 301
     Width = 119
     Height = 13
     Caption = 'Version of OPM software'
   end
   object Label8: TLabel
-    Left = 741
-    Top = 278
+    Left = 749
+    Top = 301
     Width = 31
     Height = 13
     Caption = 'Label8'
+  end
+  object TLabel
+    Left = 448
+    Top = 128
+    Width = 3
+    Height = 13
   end
   object answerInsrtumentMemo: TMemo
     Left = 610
@@ -82,11 +88,10 @@ object Form1: TForm1
     Top = 16
     Width = 596
     Height = 411
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     TabOrder = 4
     object TabSheet1: TTabSheet
       Caption = 'Manual mode'
-      ExplicitLeft = -52
       object Label1: TLabel
         Left = 11
         Top = 19
@@ -569,26 +574,172 @@ object Form1: TForm1
       end
     end
     object TabSheet3: TTabSheet
-      Caption = 'WaveLength'
+      Caption = 'Check stabilty'
       ImageIndex = 2
-      object Button17: TButton
-        Left = 72
-        Top = 112
-        Width = 75
-        Height = 25
-        Caption = 'ReadPower'
-        TabOrder = 0
-        OnClick = Button17Click
+      object Label10: TLabel
+        Left = 348
+        Top = 21
+        Width = 37
+        Height = 13
+        Caption = 'Label10'
       end
+      object Label11: TLabel
+        Left = 8
+        Top = 21
+        Width = 22
+        Height = 13
+        Caption = 'Time'
+      end
+      object Label12: TLabel
+        Left = 8
+        Top = 43
+        Width = 30
+        Height = 13
+        Caption = 'Period'
+      end
+      object Label13: TLabel
+        Left = 87
+        Top = 21
+        Width = 32
+        Height = 13
+        Caption = 'minute'
+      end
+      object Label14: TLabel
+        Left = 87
+        Top = 43
+        Width = 48
+        Height = 13
+        Caption = 'milisecond'
+      end
+      object LabelMin: TLabel
+        Left = 432
+        Top = 21
+        Width = 16
+        Height = 13
+        Caption = 'min'
+      end
+      object LabelMax: TLabel
+        Left = 495
+        Top = 21
+        Width = 20
+        Height = 13
+        Caption = 'max'
+      end
+      object Chart1: TChart
+        Left = 3
+        Top = 67
+        Width = 582
+        Height = 313
+        Legend.Visible = False
+        Title.Text.Strings = (
+          'TChart')
+        Title.Visible = False
+        DepthAxis.Automatic = False
+        DepthAxis.AutomaticMaximum = False
+        DepthAxis.AutomaticMinimum = False
+        DepthAxis.Maximum = 0.530000000000000000
+        DepthAxis.Minimum = -0.470000000000000000
+        DepthTopAxis.Automatic = False
+        DepthTopAxis.AutomaticMaximum = False
+        DepthTopAxis.AutomaticMinimum = False
+        DepthTopAxis.Maximum = 0.530000000000000000
+        DepthTopAxis.Minimum = -0.470000000000000000
+        RightAxis.Automatic = False
+        RightAxis.AutomaticMaximum = False
+        RightAxis.AutomaticMinimum = False
+        RightAxis.Visible = False
+        TopAxis.Automatic = False
+        TopAxis.AutomaticMaximum = False
+        TopAxis.AutomaticMinimum = False
+        TopAxis.Visible = False
+        View3D = False
+        TabOrder = 0
+        PrintMargins = (
+          15
+          27
+          15
+          27)
+        ColorPaletteIndex = 13
+        object Series1: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 10708548
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+      end
+      object EditTime: TEdit
+        Left = 44
+        Top = 18
+        Width = 37
+        Height = 21
+        TabOrder = 1
+        Text = '5'
+      end
+      object EditPeriod: TEdit
+        Left = 44
+        Top = 40
+        Width = 37
+        Height = 21
+        TabOrder = 2
+        Text = '1000'
+      end
+      object ButtonStartThread: TButton
+        Left = 188
+        Top = 16
+        Width = 61
+        Height = 25
+        Caption = 'Start'
+        TabOrder = 3
+        OnClick = ButtonStartThreadClick
+      end
+      object ButtonStopThread: TButton
+        Left = 255
+        Top = 16
+        Width = 61
+        Height = 25
+        Caption = 'Stop'
+        TabOrder = 4
+        OnClick = ButtonStopThreadClick
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'TabSheet4'
+      ImageIndex = 3
       object Button18: TButton
-        Left = 72
-        Top = 48
+        Left = 478
+        Top = 16
         Width = 75
         Height = 25
         Caption = 'init'
-        TabOrder = 1
+        TabOrder = 0
         OnClick = Button18Click
       end
+      object Button17: TButton
+        Left = 478
+        Top = 47
+        Width = 75
+        Height = 25
+        Caption = 'ReadPower'
+        TabOrder = 1
+        OnClick = Button17Click
+      end
     end
+  end
+  object ButtonClearLog: TButton
+    Left = 610
+    Top = 270
+    Width = 75
+    Height = 25
+    Caption = 'Clear Log'
+    TabOrder = 5
+    OnClick = ButtonClearLogClick
   end
 end

@@ -2,6 +2,7 @@
 
 #include <vcl.h>
 #include <registry.hpp>
+#include <math.h>
 
 #define __BORLAND__
 
@@ -33,11 +34,15 @@
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+#pragma link "Chart"
+#pragma link "Series"
+#pragma link "TeEngine"
+#pragma link "TeeProcs"
 #pragma resource "*.dfm"
 TForm1 *Form1;
-instrumentPowerMeter *dev;
-instrumentTunableLaserSource *dev_lsr;
-instrumentWaveLenghtMeter *dev_wlm;
+//instrumentPowerMeter *dev;
+//instrumentTunableLaserSource *dev_lsr;
+//instrumentWaveLenghtMeter *dev_wlm;
 
 TPort* Port;
 
@@ -143,6 +148,18 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 	  answerInsrtumentMemo->Lines->Add("!!! Can't open database file!");
    }
 
+
+   	Series1 = new TLineSeries(Chart1);
+	Chart1->AddSeries(Series1);
+	Label10->Caption = "Time";
+
+
+ //	PageControl1->Pages->
+
+
+
+	ButtonStopThread->Enabled = false;
+
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
@@ -192,6 +209,12 @@ void __fastcall TForm1::buttonDBmClick(TObject *Sender)
 
 void __fastcall TForm1::buttonPowerClick(TObject *Sender)
 {
+   if(flag_init_GOLDOPM==false)
+   {
+	  answerInsrtumentMemo->Lines->Add("No init GPIB device!!");
+	  return;
+   }
+
    char buf[256];
    int a = dev->returnPower(StrToInt(slotNumber->Text),buf);
 
@@ -403,6 +426,11 @@ void __fastcall TForm1::buttonSetWavelenghtClick(TObject *Sender)
 
 void __fastcall TForm1::buttonReadTwoClick(TObject *Sender)
 {
+   if(flag_init_GOLDOPM==false)
+   {
+	  answerInsrtumentMemo->Lines->Add("No init GPIB device!!");
+	  return;
+   }
 
    ReadPower(RadioGroup1->ItemIndex);
    char buf[256];
@@ -420,6 +448,11 @@ void __fastcall TForm1::buttonReadTwoClick(TObject *Sender)
 // Set wave for all button
 void __fastcall TForm1::buttonSetWaveForAllClick(TObject *Sender)
 {
+   if(flag_init_GOLDOPM==false)
+   {
+	  answerInsrtumentMemo->Lines->Add("No init GPIB device!!");
+	  return;
+   }
    int indexInDevice;
    SetWorkingWaveLenght(RadioGroup1->ItemIndex,&indexInDevice);
 }
@@ -993,4 +1026,62 @@ void __fastcall TForm1::ButtonSetZeroClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+
+void __fastcall TForm1::ButtonStartThreadClick(TObject *Sender)
+{
+		tth	=  new MyThread(true);
+		tth->Priority = tpNormal;
+		tth->Series = Series1;
+		tth->Label = Label10;
+		tth->LabelMin = LabelMin;
+		tth->LabelMax = LabelMax;
+
+		LabelMin->Caption = "";
+		LabelMax->Caption = "";
+
+		tth->dev = dev;
+
+		Series1->Clear();
+		tth->sec = 0;
+
+
+
+		tth->period = StrToInt(EditPeriod->Text);
+		tth->max_time = StrToInt(EditTime->Text)*60*1000;
+		tth->Resume();
+
+		ButtonStartThread->Enabled = false;
+		ButtonStopThread->Enabled = true;
+
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::ButtonStopThreadClick(TObject *Sender)
+{
+	tth->fl_end = true;
+ //	tth->sec = 120;
+   //	  sleep(1);
+	//  tth->Suspend();
+	  ButtonStartThread->Enabled = true;
+	  ButtonStopThread->Enabled = false;
+ //	while(tth->fl_end==true)
+ //	{  }
+
+
+   //	tth->Suspend();
+  // tth->Terminate();
+
+
+}
+//---------------------------------------------------------------------------
+
+
+
+
+void __fastcall TForm1::ButtonClearLogClick(TObject *Sender)
+{
+   answerInsrtumentMemo->Clear();
+}
+//---------------------------------------------------------------------------
 
